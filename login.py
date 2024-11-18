@@ -38,6 +38,7 @@ class LoginPage:
         self.password_entry = Entry(self.entry_frame, font = ("sans-serif", 15), bd = 3, textvariable=password, show = '*')
         self.password_entry.grid(row = 1, column=1, padx=2,pady = 2)
 
+
         # --------functions ------------
         def check_login():
             '''
