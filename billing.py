@@ -44,7 +44,13 @@ class BillingPage:
             "Medu Vada" : 40,
             "Paratha"   : 50,
             "Dosa"      : 60,
-            "Sandwich"  : 45
+            "Sandwich"  : 45,
+            "noodles"   : 50,
+            "fried rice" : 50,
+            "dal rice"  : 67,
+            "chai"      : 15,
+            "vada pav"  : 14,
+            "samosa"    : 13
     }
         
         
