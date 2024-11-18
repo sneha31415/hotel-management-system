@@ -1,7 +1,10 @@
 
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import random
+from datetime import datetime
+
 
 # --------billing window class-----------
 class BillingPage:
@@ -16,6 +19,17 @@ class BillingPage:
         # --------variables--------
         bill_no_tk = IntVar()
         bill_no_tk.set(random.randint(10000, 99999))
+
+        cust_name =  StringVar()
+        cust_contact = StringVar()
+        # curr date and time
+        date = StringVar()
+        now = datetime.now().strftime("%Y-%m-%d  %H:%M")
+        date.set(now)
+
+        item = StringVar()
+        item_quan = StringVar()
+        cost_per_item = StringVar()
 
         # ---------entry---------
         self.entry_frame = LabelFrame(self.root, text = "Enter Details", bg = "lightgrey", font = ("sans-serif", 20), bd = 7, relief = GROOVE)
@@ -33,43 +47,46 @@ class BillingPage:
         self.name_label = Label(self.entry_frame, text = "customer Name", font = ('Arial', 15), bg = "lightgrey")
         self.name_label.grid(row = 1, column= 0, padx= 2, pady = 2)
 
-        self.name_entry = Entry(self.entry_frame, bd = 5, textvariable=None, font = ('Arial', 15))
+        self.name_entry = Entry(self.entry_frame, bd = 5, textvariable=cust_name, font = ('Arial', 15))
         self.name_entry.grid(row = 1, column= 1, padx=2, pady=2)
 
         # contact number
         self.contact_label = Label(self.entry_frame, text = "contact Number", font = ('Arial', 15), bg = "lightgrey")
         self.contact_label.grid(row = 2, column= 0, padx= 2, pady = 2)
 
-        self.contact_entry = Entry(self.entry_frame, bd = 5, textvariable=None, font = ('Arial', 15))
+        self.contact_entry = Entry(self.entry_frame, bd = 5, textvariable=cust_contact, font = ('Arial', 15))
         self.contact_entry.grid(row = 2, column= 1, padx=2, pady=2)
 
         # date 
         self.date_label = Label(self.entry_frame, text = "Date", font = ('Arial', 15), bg = "lightgrey")
         self.date_label.grid(row = 3, column= 0, padx= 2, pady = 2)
 
-        self.date_entry = Entry(self.entry_frame, bd = 5, textvariable=None, font = ('Arial', 15))
+        self.date_entry = Entry(self.entry_frame, bd = 5, textvariable=date, font = ('Arial', 15))
         self.date_entry.grid(row = 3, column= 1, padx=2, pady=2)
+        self.date_entry.config(state = "disabled")
 
         # item purchased
         self.item_lable = Label(self.entry_frame, text = "Item purchased", font = ('Arial', 15), bg = "lightgrey")
         self.item_lable.grid(row = 4, column= 0, padx= 2, pady = 2)
 
-        self.item_entry = Entry(self.entry_frame, bd = 5, textvariable=None, font = ('Arial', 15))
+        self.item_entry = Entry(self.entry_frame, bd = 5, textvariable=item, font = ('Arial', 15))
         self.item_entry.grid(row = 4, column= 1, padx=2, pady=2)
 
         # item quantity purchased
         self.item_quantity_lable = Label(self.entry_frame, text = "Item quantity", font = ('Arial', 15), bg = "lightgrey")
         self.item_quantity_lable.grid(row = 5, column= 0, padx= 2, pady = 2)
 
-        self.item_quantity_entry = Entry(self.entry_frame, bd = 5, textvariable=None, font = ('Arial', 15))
+        self.item_quantity_entry = Entry(self.entry_frame, bd = 5, textvariable=item_quan, font = ('Arial', 15))
         self.item_quantity_entry.grid(row = 5, column= 1, padx=2, pady=2)
 
-        # item quantity purchased
+        # cost of one item 
         self.item_cost_lable = Label(self.entry_frame, text = "cost of one", font = ('Arial', 15), bg = "lightgrey")
         self.item_cost_lable.grid(row = 6, column= 0, padx= 2, pady = 2)
 
-        self.item_cost_entry = Entry(self.entry_frame, bd = 5, textvariable=None, font = ('Arial', 15))
+        self.item_cost_entry = Entry(self.entry_frame, bd = 5, textvariable=cost_per_item, font = ('Arial', 15))
         self.item_cost_entry.grid(row = 6, column= 1, padx=2, pady=2)
+
+        # functions 
 
 
         # -----------buttons----------------
