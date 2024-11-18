@@ -5,7 +5,7 @@ from tkinter import messagebox
 import random
 from datetime import datetime
 import sys
-
+from tkinter import ttk
 
 '''
 you can keep the buttons for save, add disabled and enable it after generte is clicked 
@@ -38,63 +38,17 @@ class BillingPage:
         total_list = []
         self.grand_total = 0
 
-
-        # ---------entry---------
-        self.entry_frame = LabelFrame(self.root, text = "Enter Details", bg = "lightgrey", font = ("sans-serif", 20), bd = 7, relief = GROOVE)
-        self.entry_frame.place(x = 120, y = 95, width = 500, height = 600)    
-
-        # bill number
-        self.bill_no_label = Label(self.entry_frame, text = "Bill Number", font = ('Arial', 15), bg = "lightgrey")
-        self.bill_no_label.grid(row = 0, column= 0, padx= 2, pady = 2)
-
-        self.bill_no_entry = Entry(self.entry_frame, bd = 5, textvariable=bill_no_tk, font = ('Arial', 15))
-        self.bill_no_entry.grid(row = 0, column= 1, padx=2, pady=2)
-        self.bill_no_entry.config(state = "disabled")
-
-        # customer name
-        self.name_label = Label(self.entry_frame, text = "customer Name", font = ('Arial', 15), bg = "lightgrey")
-        self.name_label.grid(row = 1, column= 0, padx= 2, pady = 2)
-
-        self.name_entry = Entry(self.entry_frame, bd = 5, textvariable=cust_name, font = ('Arial', 15))
-        self.name_entry.grid(row = 1, column= 1, padx=2, pady=2)
-
-        # contact number
-        self.contact_label = Label(self.entry_frame, text = "contact Number", font = ('Arial', 15), bg = "lightgrey")
-        self.contact_label.grid(row = 2, column= 0, padx= 2, pady = 2)
-
-        self.contact_entry = Entry(self.entry_frame, bd = 5, textvariable=cust_contact, font = ('Arial', 15))
-        self.contact_entry.grid(row = 2, column= 1, padx=2, pady=2)
-
-        # date 
-        self.date_label = Label(self.entry_frame, text = "Date", font = ('Arial', 15), bg = "lightgrey")
-        self.date_label.grid(row = 3, column= 0, padx= 2, pady = 2)
-
-        self.date_entry = Entry(self.entry_frame, bd = 5, textvariable=date, font = ('Arial', 15))
-        self.date_entry.grid(row = 3, column= 1, padx=2, pady=2)
-        self.date_entry.config(state = "disabled")
-
-        # item purchased
-        self.item_lable = Label(self.entry_frame, text = "Item purchased", font = ('Arial', 15), bg = "lightgrey")
-        self.item_lable.grid(row = 4, column= 0, padx= 2, pady = 2)
-
-        self.item_entry = Entry(self.entry_frame, bd = 5, textvariable=item, font = ('Arial', 15))
-        self.item_entry.grid(row = 4, column= 1, padx=2, pady=2)
-
-        # item quantity purchased
-        self.item_quantity_lable = Label(self.entry_frame, text = "Item quantity", font = ('Arial', 15), bg = "lightgrey")
-        self.item_quantity_lable.grid(row = 5, column= 0, padx= 2, pady = 2)
-
-        self.item_quantity_entry = Entry(self.entry_frame, bd = 5, textvariable=item_quan, font = ('Arial', 15))
-        self.item_quantity_entry.grid(row = 5, column= 1, padx=2, pady=2)
-
-        # cost of one item 
-        self.item_cost_lable = Label(self.entry_frame, text = "cost of one", font = ('Arial', 15), bg = "lightgrey")
-        self.item_cost_lable.grid(row = 6, column= 0, padx= 2, pady = 2)
-
-        self.item_cost_entry = Entry(self.entry_frame, bd = 5, textvariable=cost_per_item, font = ('Arial', 15))
-        self.item_cost_entry.grid(row = 6, column= 1, padx=2, pady=2)
-
-        #--------- functions---------- 
+        # menu
+        menu_items = {
+            "Idli"      : 30,
+            "Medu Vada" : 40,
+            "Paratha"   : 50,
+            "Dosa"      : 60,
+            "Sandwich"  : 45
+    }
+        
+        
+         #--------- functions---------- 
         def default_bill():
             '''
             default text on every bill
@@ -145,7 +99,6 @@ class BillingPage:
 
             total_list.append(total)
             self.bill_text.insert(END, f"\n{item.get()}\t\t        {item_quantity}\t\t       {coi}\t\t          {total}")
-            # self.bill_text.insert(END, f"\n{item.get()}\t\t{item_quantity}\t\t{coi}\t\t{item_quantity * coi}")
 
 
         def grand_total():
@@ -173,8 +126,76 @@ class BillingPage:
             else:
                 return
             
-            
+        def update_price(event):
+            selected_item = item.get()
+            if selected_item in menu_items:
+                cost_per_item.set(menu_items[selected_item])  # Set the price for the selected item
+            else:
+                cost_per_item.set("")  # Clear the price if the selection is invalid
 
+
+
+        # ---------entry---------
+        self.entry_frame = LabelFrame(self.root, text = "Enter Details", bg = "lightgrey", font = ("sans-serif", 20), bd = 7, relief = GROOVE)
+        self.entry_frame.place(x = 120, y = 95, width = 500, height = 600)    
+
+        # bill number
+        self.bill_no_label = Label(self.entry_frame, text = "Bill Number", font = ('Arial', 15), bg = "lightgrey")
+        self.bill_no_label.grid(row = 0, column= 0, padx= 2, pady = 2)
+
+        self.bill_no_entry = Entry(self.entry_frame, bd = 5, textvariable=bill_no_tk, font = ('Arial', 15))
+        self.bill_no_entry.grid(row = 0, column= 1, padx=2, pady=2)
+        self.bill_no_entry.config(state = "disabled")
+
+        # customer name
+        self.name_label = Label(self.entry_frame, text = "customer Name", font = ('Arial', 15), bg = "lightgrey")
+        self.name_label.grid(row = 1, column= 0, padx= 2, pady = 2)
+
+        self.name_entry = Entry(self.entry_frame, bd = 5, textvariable=cust_name, font = ('Arial', 15))
+        self.name_entry.grid(row = 1, column= 1, padx=2, pady=2)
+
+        # contact number
+        self.contact_label = Label(self.entry_frame, text = "contact Number", font = ('Arial', 15), bg = "lightgrey")
+        self.contact_label.grid(row = 2, column= 0, padx= 2, pady = 2)
+
+        self.contact_entry = Entry(self.entry_frame, bd = 5, textvariable=cust_contact, font = ('Arial', 15))
+        self.contact_entry.grid(row = 2, column= 1, padx=2, pady=2)
+
+        # date 
+        self.date_label = Label(self.entry_frame, text = "Date", font = ('Arial', 15), bg = "lightgrey")
+        self.date_label.grid(row = 3, column= 0, padx= 2, pady = 2)
+
+        self.date_entry = Entry(self.entry_frame, bd = 5, textvariable=date, font = ('Arial', 15))
+        self.date_entry.grid(row = 3, column= 1, padx=2, pady=2)
+        self.date_entry.config(state = "disabled")
+
+        # item purchased
+        self.item_lable = Label(self.entry_frame, text = "Item purchased", font = ('Arial', 15), bg = "lightgrey")
+        self.item_lable.grid(row = 4, column= 0, padx= 2, pady = 2)
+
+        # self.item_entry = Entry(self.entry_frame, bd = 5, textvariable=item, font = ('Arial', 15))
+        # self.item_entry.grid(row = 4, column= 1, padx=2, pady=2)
+        # ADDING A DROPDOWN ENTRY
+        self.item_combobox = ttk.Combobox(self.entry_frame, values=list(menu_items.keys()), textvariable=item, font=('Arial', 15), state="readonly")
+        self.item_combobox.grid(row=4, column=1, padx=2, pady=2)
+        self.item_combobox.bind("<<ComboboxSelected>>", update_price)
+
+        # item quantity purchased
+        self.item_quantity_lable = Label(self.entry_frame, text = "Item quantity", font = ('Arial', 15), bg = "lightgrey")
+        self.item_quantity_lable.grid(row = 5, column= 0, padx= 2, pady = 2)
+
+        self.item_quantity_entry = Entry(self.entry_frame, bd = 5, textvariable=item_quan, font = ('Arial', 15))
+        self.item_quantity_entry.grid(row = 5, column= 1, padx=2, pady=2)
+
+        # cost of one item 
+        self.item_cost_lable = Label(self.entry_frame, text = "cost of one", font = ('Arial', 15), bg = "lightgrey")
+        self.item_cost_lable.grid(row = 6, column= 0, padx= 2, pady = 2)
+
+        self.item_cost_entry = Entry(self.entry_frame, bd = 5, textvariable=cost_per_item, font = ('Arial', 15))
+        self.item_cost_entry.grid(row = 6, column= 1, padx=2, pady=2)
+
+
+       
         # -----------buttons----------------
         self.button_frame = LabelFrame(self.entry_frame, text = "options",  bd = 5, bg = "lightgrey", font = ("Arial", 15))
         self.button_frame.place(x = 10, y = 300, width = 400, height = 220)
@@ -194,7 +215,7 @@ class BillingPage:
         self.reset_btn = Button(self.button_frame, bd = 5, text = "Reset", font = ("Arial", 12), width = 12, height=3, command = reset)
         self.reset_btn.grid(row = 1, column= 1, padx=4, pady=2)
 
-        self.save_btn = Button(self.button_frame, bd = 5, text = "Save", font = ("Arial", 12), width = 12, height=3)
+        self.save_btn = Button(self.button_frame, bd = 5, text = "Save", font = ("Arial", 12), width = 12, height=3, command=save_func)
         self.save_btn.grid(row = 1, column= 2, padx=4, pady=2)
 
         # bill frame
