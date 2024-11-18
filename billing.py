@@ -4,8 +4,12 @@ from tkinter import ttk
 from tkinter import messagebox
 import random
 from datetime import datetime
+import sys
 
 
+'''
+you can keep the buttons for save, add disabled and enable it after generte is clicked 
+'''
 # --------billing window class-----------
 class BillingPage:
     def __init__(self, root):
@@ -30,6 +34,10 @@ class BillingPage:
         item = StringVar()
         item_quan = StringVar()
         cost_per_item = StringVar()
+        
+        total_list = []
+        self.grand_total = 0
+
 
         # ---------entry---------
         self.entry_frame = LabelFrame(self.root, text = "Enter Details", bg = "lightgrey", font = ("sans-serif", 20), bd = 7, relief = GROOVE)
@@ -86,26 +94,104 @@ class BillingPage:
         self.item_cost_entry = Entry(self.entry_frame, bd = 5, textvariable=cost_per_item, font = ('Arial', 15))
         self.item_cost_entry.grid(row = 6, column= 1, padx=2, pady=2)
 
-        # functions 
+        #--------- functions---------- 
+        def default_bill():
+            '''
+            default text on every bill
+            '''
+            self.bill_text.insert(END, "\t\t\t      VJTI Canteen")
+            self.bill_text.insert(END, "\n\t\t    near Quanrangle, VJTI, Matunga E")
+            self.bill_text.insert(END, "\n\t\t        Contact - +21 2100080914")
+            self.bill_text.insert(END, "\n======================================================================")
+            self.bill_text.insert(END, f"\nBill Number {bill_no_tk.get()}")
 
+
+        def generate_bill():
+            if cust_name.get()== "" :
+                messagebox.showerror("customer name cannot be empty!")
+            else:
+                self.bill_text.delete(6.0, END)
+                self.bill_text.insert(END, f"\nCustomer Name {cust_name.get()}")
+                self.bill_text.insert(END, f"\nCustomer Contact {cust_contact.get()}")
+                self.bill_text.insert(END, f"\nDate {date.get()}")
+                self.bill_text.insert(END, "\n======================================================================")
+                self.bill_text.insert(END, "\nProduct Name\t\t        Quantity\t\t   cost per item\t\t   total cost ")
+                self.bill_text.insert(END, "\n======================================================================")
+
+
+        def clear():
+            '''
+            clears all info except date,  and bill from the form
+            '''
+            total_list = []
+            cust_name.set("")
+            cust_contact.set("")
+            item.set("")
+            item_quan.set("")
+            cost_per_item.set("")
+
+        def reset():
+            '''
+            resets the entire bill
+            '''
+            total_list = []
+            self.bill_text.delete("1.0", END)
+            default_bill()
+
+        def add_func():
+            item_quantity = int(item_quan.get())
+            coi = int(cost_per_item.get())
+            total = item_quantity * coi
+
+            total_list.append(total)
+            self.bill_text.insert(END, f"\n{item.get()}\t\t        {item_quantity}\t\t       {coi}\t\t          {total}")
+            # self.bill_text.insert(END, f"\n{item.get()}\t\t{item_quantity}\t\t{coi}\t\t{item_quantity * coi}")
+
+
+        def grand_total():
+            '''
+            global grand total
+            '''
+            for item in total_list:
+                self.grand_total +=  item
+
+            self.bill_text.insert(END, "\n======================================================================")
+            self.bill_text.insert(END, f"\n\t\t\t\t\t\t    Grand total : {self.grand_total}")
+            self.bill_text.insert(END, "\n======================================================================")
+
+        def save_func():
+            user_choice = messagebox.askyesno("Confirm", f"Do you want to save the bill {bill_no_tk.get()}", parent = self.root )
+            if (user_choice > 0):
+                self.bill_content = self.bill_text.get("1.0", END)
+                try:
+                    con = open(f"{sys.path[0]}/bills/" + str(bill_no_tk.get()) + ".txt", "w")
+                except Exception as e:
+                    messagebox.showerror("error!", f"error due to {e}", parent = self.root)
+                con.write(self.bill_content)
+                con.close()
+                messagebox.showinfo("success!", f" bill {bill_no_tk.get()} has been saved successfully!", parent = self.root)
+            else:
+                return
+            
+            
 
         # -----------buttons----------------
         self.button_frame = LabelFrame(self.entry_frame, text = "options",  bd = 5, bg = "lightgrey", font = ("Arial", 15))
         self.button_frame.place(x = 10, y = 300, width = 400, height = 220)
 
-        self.add_btn = Button(self.button_frame, bd = 5, text = "Add", font = ("Arial", 12), width = 12, height=3)
+        self.add_btn = Button(self.button_frame, bd = 5, text = "Add", font = ("Arial", 12), width = 12, height=3, command = add_func)
         self.add_btn.grid(row = 0, column= 0, padx=4, pady=2)
 
-        self.generate_btn = Button(self.button_frame, bd = 5, text = "Generate", font = ("Arial", 12), width = 12, height=3)
+        self.generate_btn = Button(self.button_frame, bd = 5, text = "Generate", font = ("Arial", 12), width = 12, height=3, command=generate_bill)
         self.generate_btn.grid(row = 0, column= 1, padx=4, pady=2)
 
-        self.clear_btn = Button(self.button_frame, bd = 5, text = "Clear", font = ("Arial", 12), width = 12, height=3)
+        self.clear_btn = Button(self.button_frame, bd = 5, text = "Clear", font = ("Arial", 12), width = 12, height=3, command = clear)
         self.clear_btn.grid(row = 0, column= 2, padx=4, pady=2)
 
-        self.total_btn = Button(self.button_frame, bd = 5, text = "Total", font = ("Arial", 12), width = 12, height=3)
+        self.total_btn = Button(self.button_frame, bd = 5, text = "Total", font = ("Arial", 12), width = 12, height=3, command = grand_total)
         self.total_btn.grid(row = 1, column= 0, padx=4, pady=2)
 
-        self.reset_btn = Button(self.button_frame, bd = 5, text = "Reset", font = ("Arial", 12), width = 12, height=3)
+        self.reset_btn = Button(self.button_frame, bd = 5, text = "Reset", font = ("Arial", 12), width = 12, height=3, command = reset)
         self.reset_btn.grid(row = 1, column= 1, padx=4, pady=2)
 
         self.save_btn = Button(self.button_frame, bd = 5, text = "Save", font = ("Arial", 12), width = 12, height=3)
@@ -113,7 +199,7 @@ class BillingPage:
 
         # bill frame
         self.bill_frame = LabelFrame(self.root, text = "Bill", bd = 7, bg = "lightgrey", font = ("sans-serif", 22), relief=GROOVE)
-        self.bill_frame.place(x = 700, y = 95, width = 500, height = 600)
+        self.bill_frame.place(x = 700, y = 95, width = 600, height = 600)
 
         # scroll bar for bill
         self.y_scroll = Scrollbar(self.bill_frame, orient="vertical")
@@ -123,6 +209,9 @@ class BillingPage:
         # pack the scroll before the text
         self.y_scroll.pack(side = RIGHT, fill = Y)
         self.bill_text.pack(fill = BOTH, expand=TRUE)
+
+        default_bill()
+
 
 root = Tk()
 app = BillingPage(root) #comment afterward
